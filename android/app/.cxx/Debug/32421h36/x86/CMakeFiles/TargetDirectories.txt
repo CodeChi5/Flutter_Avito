@@ -1,0 +1,2 @@
+/home/cho-glitch/Documents/Flutter_Avito/android/app/.cxx/Debug/32421h36/x86/CMakeFiles/edit_cache.dir
+/home/cho-glitch/Documents/Flutter_Avito/android/app/.cxx/Debug/32421h36/x86/CMakeFiles/rebuild_cache.dir

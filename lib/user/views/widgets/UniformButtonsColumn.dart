@@ -26,7 +26,7 @@ class UniformButtonsColumn extends StatelessWidget {
     double borderRadius = 10,
     double? iconSpacing,
   }) {
-    return Container(
+    return SizedBox(
       width: width,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -62,7 +62,7 @@ class UniformButtonsColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

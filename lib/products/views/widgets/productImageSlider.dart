@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class ImageSlider extends StatefulWidget {
   final List<String> images;
 
-  ImageSlider({required this.images});
+  const ImageSlider({super.key, required this.images});
 
   @override
   _ImageSliderState createState() => _ImageSliderState();
 }
 
 class _ImageSliderState extends State<ImageSlider> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   void _onPageChanged(int index) {

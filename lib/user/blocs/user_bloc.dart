@@ -15,17 +15,20 @@ class UserBLoc extends Bloc<UserEvent, UserState> {
   Future<String> SendCodeRegisterUser(UserTrigerState event) async {
     print('45564654');
     emit(UserLoadingState());
-    String response = await repo.SendCodeRegisterSendCode(event.phone);
+    bool success = await repo.sendPhoneVerification(event.phone);
 
-    return response;
+    return success ? 'Code sent' : 'Failed to send code';
   }
 
   Future<String> VerifyCodeRegisterUser(UserCodeTrigerState event) async {
     print('45564654');
     emit(UserLoadingState());
-    String response =
-        await repo.VerifyCodeRegisterSendCode(event.phone, event.code);
+    final result = await repo.verifyPhoneCode(event.phone, event.code);
 
-    return response;
+    if (result['success']) {
+      return 'Authenticated';
+    } else {
+      return result['error'] ?? 'Verification failed';
+    }
   }
 }

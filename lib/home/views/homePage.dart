@@ -26,13 +26,11 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
-  // late List<Product> _products;
   TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ProductBLoc>(context).GetProducts(ProductTrigerState());
   }
 
   @override
@@ -41,60 +39,62 @@ class _HomePageViewState extends State<HomePageView> {
     double screenWeight = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        body: RepositoryProvider<CategoriesRepo>(
-            create: (context) => CategoriesRepo(),
-            child: BlocProvider<CategoriesReseachBLoc>(
-              create: (context) =>
-                  CategoriesReseachBLoc(context.read<CategoriesRepo>()),
-              child:
-                  BlocListener<CategoriesReseachBLoc, CategoriesReseachState>(
-                listener: (context, state) {
-                  print("lising${state}");
-                },
-                child: Container(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        HomeTopBar(),
-                        ResearchList(),
-                        BlocBuilder<CategoriesReseachBLoc,
-                            CategoriesReseachState>(builder: (context, state) {
-                          if (state is CategoriesReseachLoadingState) {
-                            return SizedBox();
-                          }
-                          if (state is CategoriesReseachLoadedState) {
-                            List<CategoriesModel> listCategories =
-                                state.Categories_List;
-
-                            return SizedBox();
-                          }
-                          return Column(
-                            children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: RepositoryProvider<CategoriesRepo>(
-                                  create: (context) => CategoriesRepo(),
-                                  child: BlocProvider<CategoriesBLoc>(
-                                    create: (context) => CategoriesBLoc(
-                                        context.read<CategoriesRepo>()),
-                                    child: BlocListener<CategoriesBLoc,
-                                        CategoriesState>(
-                                      listener: (context, state) {},
-                                      child: CategoriesListView(),
-                                    ),
-                                  ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(120),
+        child: HomeTopBar(),
+      ),
+      body: RepositoryProvider<CategoriesRepo>(
+        create: (context) => CategoriesRepo(),
+        child: BlocProvider<CategoriesReseachBLoc>(
+          create: (context) =>
+              CategoriesReseachBLoc(context.read<CategoriesRepo>()),
+          child: BlocListener<CategoriesReseachBLoc, CategoriesReseachState>(
+            listener: (context, state) {
+              print("lising$state");
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ResearchList(),
+                  BlocBuilder<CategoriesReseachBLoc, CategoriesReseachState>(
+                    builder: (context, state) {
+                      if (state is CategoriesReseachLoadingState) {
+                        return SizedBox();
+                      }
+                      if (state is CategoriesReseachLoadedState) {
+                        List<CategoriesModel> listCategories =
+                            state.Categories_List;
+                        return SizedBox();
+                      }
+                      return Column(
+                        children: [
+                          Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: RepositoryProvider<CategoriesRepo>(
+                              create: (context) => CategoriesRepo(),
+                              child: BlocProvider<CategoriesBLoc>(
+                                create: (context) => CategoriesBLoc(
+                                    context.read<CategoriesRepo>()),
+                                child: BlocListener<CategoriesBLoc,
+                                    CategoriesState>(
+                                  listener: (context, state) {},
+                                  child: CategoriesListView(),
                                 ),
                               ),
-                              ProductListView()
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
+                            ),
+                          ),
+                          ProductListView()
+                        ],
+                      );
+                    },
                   ),
-                ),
+                ],
               ),
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

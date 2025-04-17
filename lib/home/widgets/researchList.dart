@@ -7,7 +7,7 @@ import 'package:myapp/categories/data/categories_model.dart';
 import 'package:myapp/home/widgets/findProductTextField.dart';
 
 class ResearchList extends StatefulWidget {
-  const ResearchList({Key? key}) : super(key: key);
+  const ResearchList({super.key});
 
   @override
   State<ResearchList> createState() => _ResearchListState();
@@ -63,10 +63,10 @@ class _ResearchListState extends State<ResearchList> {
                   children: listCategories.map((category) {
                 return ListTile(
                   leading: Icon(BootstrapIcons.airplane, color: Colors.white),
-                  title: Text("${category.name}",
+                  title: Text(category.name,
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.white)),
-                  subtitle: Text("${category.subtitle}",
+                  subtitle: Text(category.subtitle,
                       style: const TextStyle(color: Colors.grey)),
                   trailing: const Icon(Icons.arrow_forward_ios,
                       color: Colors.grey, size: 16),

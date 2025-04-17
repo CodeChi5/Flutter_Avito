@@ -1,13 +1,6 @@
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/categories/blocs/categories_bloc.dart';
-import 'package:myapp/categories/blocs/categories_state.dart';
-import 'package:myapp/categories/data/categories_repo.dart';
-import 'package:myapp/categories/views/widgets/categorisList.dart';
 import 'package:myapp/products/data/product_model.dart';
-import 'package:myapp/categories/views/widgets/categorisCard.dart';
-import 'package:myapp/home/widgets/findProductTextField.dart';
 import 'package:myapp/products/views/productPage.dart';
 import 'package:myapp/products/views/widgets/productCard.dart';
 import 'package:shimmer/shimmer.dart';
@@ -29,7 +22,7 @@ class _ProductListViewState extends State<ProductListView> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ProductBLoc>(context).GetProducts(ProductTrigerState());
+    BlocProvider.of<ProductBLoc>(context).getProducts();
   }
 
   @override
@@ -86,22 +79,96 @@ class _ProductListViewState extends State<ProductListView> {
                   itemCount: state.Product_List.length,
                   padding: const EdgeInsets.all(8),
                   itemBuilder: (BuildContext context, int index) {
-                    ProductModel product = state.Product_List[index];
+                    Product product = state.Product_List[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductPage(
-                                    images: product.imageUrl,
+                                    images: product.images
+                                            ?.map((e) => e.image)
+                                            .toList() ??
+                                        [],
                                     price: '${product.price}',
                                     title: product.name,
+                                    productId: product.id ?? 0,
                                   )),
                         );
                         print("testt");
                       },
-                      child: ProductCard(
-                        product: product,
+                      child: Container(
+                        margin: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                  image: DecorationImage(
+                                    image: NetworkImage(product.imageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              color: const Color.fromARGB(30, 255, 255, 255),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: SizedBox(
+                                            child: Text(
+                                              product.name.length > 20
+                                                  ? '${product.name.substring(0, 20)}...'
+                                                  : product.name,
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () =>
+                                            {}, // Clickable right icon
+                                        icon: const Icon(
+                                          Icons.favorite_border,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      '\$${product.price}',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
