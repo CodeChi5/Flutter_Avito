@@ -18,11 +18,11 @@ class CategoriesBLoc extends Bloc<CategoriesEvent, CategoriesState> {
       CategoriesTrigerState event) async {
     print("Im here Cat");
     emit(CategoriesLoadingState());
-    List<CategoriesModel> list_Categories = await repo.getCategories();
+    List<CategoriesModel> listCategories = await repo.getCategories();
 
-    emit(CategoriesLoadedState(Categories_List: list_Categories));
+    emit(CategoriesLoadedState(Categories_List: listCategories));
 
-    return list_Categories;
+    return listCategories;
   }
 }
 
@@ -38,12 +38,12 @@ class CategoriesReseachBLoc
       CategoriesReseachTrigerState event) async {
     print("Im here bLOClist");
     emit(CategoriesReseachLoadingState());
-    List<CategoriesModel> list_Categories = await repo.getCategories();
+    List<CategoriesModel> listCategories = await repo.getCategories();
     await Future.delayed(const Duration(seconds: 3));
 
-    emit(CategoriesReseachLoadedState(Categories_List: list_Categories));
+    emit(CategoriesReseachLoadedState(Categories_List: listCategories));
 
-    return list_Categories;
+    return listCategories;
   }
 
   @override
@@ -67,11 +67,11 @@ class SubCategoriesBLoc extends Bloc<CategoriesEvent, SubCategoriesState> {
       SubCategoriesTrigerState event) async {
     print("Im id ${event.id}");
     emit(SubCategoriesLoadingState());
-    List<SubCategoriesModel> list_Sub_Categories =
+    List<SubCategoriesModel> listSubCategories =
         await repo.getSubCategories(event.id);
-    print('list_sub ${list_Sub_Categories}');
-    emit(SubCategoriesLoadedState(Categories_List: list_Sub_Categories));
+    print('list_sub $listSubCategories');
+    emit(SubCategoriesLoadedState(Categories_List: listSubCategories));
 
-    return list_Sub_Categories;
+    return listSubCategories;
   }
 }

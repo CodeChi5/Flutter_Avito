@@ -1,26 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/categories/blocs/categories_bloc.dart';
-import 'package:myapp/categories/blocs/categories_state.dart';
 import 'package:myapp/categories/data/categories_repo.dart';
 import 'package:myapp/categories/views/SingleCategorisPage.dart';
 import 'package:myapp/home/views/NavHolder.dart';
-import 'package:myapp/home/views/homePage.dart';
 import 'package:myapp/products/blocs/product_bloc.dart';
-import 'package:myapp/products/blocs/product_state.dart';
 import 'package:myapp/products/data/product_repo.dart';
-import 'package:myapp/products/views/productList.dart';
 import 'package:myapp/theme.dart';
+import 'package:myapp/theme/blocs/theme_bloc.dart';
+import 'package:myapp/theme/blocs/theme_state.dart';
+import 'package:myapp/user/blocs/auth_bloc.dart';
+import 'package:myapp/user/blocs/auth_state_bloc.dart';
 import 'package:myapp/user/blocs/user_bloc.dart';
 import 'package:myapp/user/data/user_repo.dart';
-import 'package:myapp/user/views/RegisterPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  // Configure system UI
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  final prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+
+  const MyApp({super.key, required this.prefs});
 
   @override
   Widget build(BuildContext context) {
@@ -36,54 +58,71 @@ class MyApp extends StatelessWidget {
           create: (context) => UserRepo(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: AppTheme.lightTheme, // Light Theme
-        darkTheme: AppTheme.darkTheme, // Dark Theme
-        themeMode: ThemeMode.system,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => MultiBlocProvider(
-                providers: [
-                  BlocProvider<ProductBLoc>(
-                    create: (context) =>
-                        ProductBLoc(context.read<ProductRepo>()),
+      child: BlocProvider(
+        create: (context) => ThemeBloc(prefs: prefs),
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: AppTheme.lightTheme.copyWith(
+                appBarTheme: AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: Colors.transparent,
+                    statusBarIconBrightness: Brightness.dark,
                   ),
-                  BlocProvider<SubCategoriesBLoc>(
-                    create: (context) =>
-                        SubCategoriesBLoc(context.read<CategoriesRepo>()),
-                  ),
-                  BlocProvider<CategoriesBLoc>(
-                    create: (context) =>
-                        CategoriesBLoc(context.read<CategoriesRepo>()),
-                  ),
-                  BlocProvider<UserBLoc>(
-                    create: (context) => UserBLoc(context.read<UserRepo>()),
-                  ),
-                ],
-                child: NaveHolderPageView(),
+                ),
               ),
-          '/singlecategorisPage': (context) => MultiBlocProvider(
-                providers: [
-                  BlocProvider<ProductBLoc>(
-                    create: (context) =>
-                        ProductBLoc(context.read<ProductRepo>()),
+              darkTheme: AppTheme.darkTheme.copyWith(
+                appBarTheme: AppBarTheme(
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: Colors.transparent,
+                    statusBarIconBrightness: Brightness.light,
                   ),
-                  BlocProvider<SubCategoriesBLoc>(
-                    create: (context) =>
-                        SubCategoriesBLoc(context.read<CategoriesRepo>()),
-                  ),
-                  BlocProvider<CategoriesBLoc>(
-                    create: (context) =>
-                        CategoriesBLoc(context.read<CategoriesRepo>()),
-                  ),
-                  BlocProvider<UserBLoc>(
-                    create: (context) => UserBLoc(context.read<UserRepo>()),
-                  ),
-                ],
-                child: SingleCategorisPage(),
+                ),
               ),
-        },
+              themeMode: state.themeMode,
+              initialRoute: '/',
+              routes: {
+                '/': (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<ProductBLoc>(
+                          create: (context) =>
+                              ProductBLoc(context.read<ProductRepo>()),
+                        ),
+                        BlocProvider<SubCategoriesBLoc>(
+                          create: (context) =>
+                              SubCategoriesBLoc(context.read<CategoriesRepo>()),
+                        ),
+                        BlocProvider<CategoriesBLoc>(
+                          create: (context) =>
+                              CategoriesBLoc(context.read<CategoriesRepo>()),
+                        ),
+                        BlocProvider<UserBLoc>(
+                          create: (context) =>
+                              UserBLoc(context.read<UserRepo>()),
+                        ),
+                        BlocProvider<CategoriesReseachBLoc>(
+                          create: (context) => CategoriesReseachBLoc(
+                              context.read<CategoriesRepo>()),
+                        ),
+                        BlocProvider<AuthStateBloc>(
+                          create: (context) => AuthStateBloc(
+                            userRepo: context.read<UserRepo>(),
+                          )..add(CheckAuthState()),
+                        ),
+                        BlocProvider<AuthBloc>(
+                          create: (context) => AuthBloc(
+                            context.read<UserRepo>(),
+                            context.read<AuthStateBloc>(),
+                          ),
+                        ),
+                      ],
+                      child: NaveHolderPageView(),
+                    ),
+              },
+            );
+          },
+        ),
       ),
     );
   }

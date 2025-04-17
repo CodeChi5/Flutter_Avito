@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:myapp/products/data/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductModel product; // Accepts ProductModel as a parameter
+  final Product product;
 
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  const ProductCard({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class ProductCard extends StatelessWidget {
                   topRight: Radius.circular(20),
                 ),
                 image: DecorationImage(
-                  image: NetworkImage(product.imageUrl[0]),
+                  image: NetworkImage(product.imageUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -41,7 +44,9 @@ class ProductCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: SizedBox(
                           child: Text(
-                            product.name,
+                            product.name.length > 20
+                                ? '${product.name.substring(0, 20)}...'
+                                : product.name,
                             style: const TextStyle(
                               fontSize: 12,
                             ),

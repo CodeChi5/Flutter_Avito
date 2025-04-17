@@ -5,7 +5,7 @@ import 'package:myapp/categories/views/SingleCategorisPage.dart';
 class CategoriesCard extends StatelessWidget {
   final CategoriesModel category; // Accepts CategoriesModel as a parameter
 
-  const CategoriesCard({Key? key, required this.category}) : super(key: key);
+  const CategoriesCard({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,10 @@ class CategoriesCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => SingleCategorisPage.withProviders(context)),
+              builder: (context) => SingleCategorisPage.withProviders(
+                    context,
+                    mainCategoryId: category.id,
+                  )),
         )
       },
       child: Container(
@@ -30,7 +33,7 @@ class CategoriesCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 15, 14, 0),
               child: Text(
-                '${category.name}',
+                category.name,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -41,7 +44,7 @@ class CategoriesCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Image.network(
-                  'http://127.0.0.1:8000/${category.imageUrl}', // Replace with actual image path
+                  'http://192.168.84.57:8000/${category.imageUrl}', // Replace with actual image path
                   scale: 1,
                   fit: BoxFit.contain,
                 ),

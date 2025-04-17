@@ -6,7 +6,7 @@ import 'package:myapp/categories/views/SingleCategorisPage.dart';
 class SubCategoriesCard extends StatelessWidget {
   final SubCategoriesModel category; // Accepts CategoriesModel as a parameter
 
-  const SubCategoriesCard({Key? key, required this.category}) : super(key: key);
+  const SubCategoriesCard({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class SubCategoriesCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 15, 14, 0),
               child: Text(
-                '${category.name}',
+                category.name,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -36,7 +36,7 @@ class SubCategoriesCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Image.network(
-                  'http://127.0.0.1:8000/${category.logoImg}', // Replace with actual image path
+                  'http://192.168.84.57:8000/${category.logoImg}', // Replace with actual image path
                   scale: 1.5,
                   fit: BoxFit.contain,
                 ),

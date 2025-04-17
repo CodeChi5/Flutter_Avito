@@ -9,10 +9,10 @@ class FindProductTextField extends StatefulWidget {
   final VoidCallback onRightIconPressed;
 
   const FindProductTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.onRightIconPressed,
-  }) : super(key: key);
+  });
 
   @override
   _FindProductTextFieldState createState() => _FindProductTextFieldState();

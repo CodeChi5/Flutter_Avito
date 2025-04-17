@@ -4,9 +4,9 @@ import 'package:myapp/categories/data/sub_categories_model.dart';
 
 class CategoriesRepo {
   static const String baseUrl_getCategories =
-      "http://127.0.0.1:8000/api/main-categories/";
+      "http://192.168.84.57:8000/api/main-categories/";
   static const String baseUrl_getSubCategories =
-      "http://127.0.0.1:8000/api/subcategories/";
+      "http://192.168.84.57:8000/api/subcategories/";
 
   Future<List<CategoriesModel>> getCategories() async {
     final response = await http.get(Uri.parse(baseUrl_getCategories));
@@ -22,7 +22,7 @@ class CategoriesRepo {
   Future<List<SubCategoriesModel>> getSubCategories(id) async {
     print(id);
     final response =
-        await http.get(Uri.parse(baseUrl_getSubCategories + '${id}' + '/'));
+        await http.get(Uri.parse('$baseUrl_getSubCategories${id}/'));
     print('Sub ${response.body}');
 
     if (response.statusCode == 200) {

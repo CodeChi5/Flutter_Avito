@@ -1,10 +1,9 @@
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/categories/blocs/categories_bloc.dart';
 import 'package:myapp/categories/blocs/categories_state.dart';
 import 'package:myapp/categories/data/categories_model.dart';
-import 'package:myapp/categories/views/widgets/CategorisCard.dart';
+import 'package:myapp/categories/views/widgets/categorisCard.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CategoriesListView extends StatefulWidget {
